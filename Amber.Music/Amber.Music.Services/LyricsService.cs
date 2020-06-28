@@ -29,7 +29,6 @@ namespace Amber.Music.Api.Services
 
         public async Task<string> SearchAsync(string artist, string title)
         {
-            // TODO: validation, error messages?!
             if (string.IsNullOrEmpty(artist))
             {
                 throw new ArgumentNullException(nameof(artist));

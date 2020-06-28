@@ -15,6 +15,6 @@ namespace Amber.Music.Domain
 
         public string Area { get; set; }
 
-        public IEnumerable<ArtistWork> Works { get; set; } = new List<ArtistWork>();
+        public IReadOnlyCollection<ArtistWork> Works { get; set; } = new List<ArtistWork>();
     }
 }

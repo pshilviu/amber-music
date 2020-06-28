@@ -10,6 +10,6 @@ namespace Amber.Music.Domain.Services
 
         Task<ArtistSearch> GetArtistAsync(Guid id);
 
-        Task<IEnumerable<ArtistWork>> GetArtistWorksAsync(Guid id);
+        Task<IReadOnlyCollection<ArtistWork>> GetArtistWorksAsync(Guid id);
     }
 }

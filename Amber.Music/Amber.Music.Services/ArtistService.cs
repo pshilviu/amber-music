@@ -57,7 +57,7 @@ namespace Amber.Music.Api.Services
             };
         }
 
-        public async Task<IEnumerable<ArtistWork>> GetArtistWorksAsync(Guid id)
+        public async Task<IReadOnlyCollection<ArtistWork>> GetArtistWorksAsync(Guid id)
         {
             using var mbQuery = new Query();
 

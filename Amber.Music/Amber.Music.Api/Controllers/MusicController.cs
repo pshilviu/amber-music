@@ -59,7 +59,7 @@ namespace Amber.Music.Api.Controllers
         [Route("report")]
         public Task<ArtistWorkReport> GetArtistWorkReport(Guid id)
         {
-            return _aggregatorProcess.AggregateData(id);
+            return _aggregatorProcess.AggregateDataAsync(id);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Amber.Music.Services
 {
-    public class AggregatorProcess
+    public class AggregatorProcess : IAggregatorProcess
     {
         private readonly ILyricsService _lyricsService;
         private readonly IArtistService _artistService;
@@ -23,12 +23,23 @@ namespace Amber.Music.Services
             _wordCounterService = wordCounterService ?? throw new ArgumentNullException(nameof(wordCounterService));
         }
 
-        public async Task<ArtistWorkReport> AggregateData(Guid artistId)
+        public async Task<ArtistWorkReport> AggregateDataAsync(Guid artistId)
         {
             // Get artist albums/works
             var artist = await _artistService.GetArtistAsync(artistId);
 
             artist.Works = await _artistService.GetArtistWorksAsync(artistId);
+
+            var report = new ArtistWorkReport
+            {
+                ArtistId = artistId,
+                Name = artist.Name
+            };
+
+            if (artist.Works == null || !artist.Works.Any())
+            {
+                return report;
+            }
 
             int sum = 0, validValuesCount = 0;
             ArtistWork minWorkInfo = null, maxWorkInfo = null;
@@ -70,23 +81,23 @@ namespace Amber.Music.Services
                 }
             });
 
-            var report = new ArtistWorkReport
+            if (validValuesCount > 0)
             {
-                ArtistId = artistId,
-                Name = artist.Name,
-                AverageWords = sum / validValuesCount,
-                MinWords = minWorkInfo,
-                MaxWords = maxWorkInfo
-            };
+                report.AverageWords = sum / validValuesCount;
+                report.TotalSongs = artist.Works.Count;
+                report.SongsConsidered = validValuesCount;
+                report.MinWords = minWorkInfo;
+                report.MaxWords = maxWorkInfo;
 
-            // using https://www.mathsisfun.com/data/standard-deviation-formulas.html
-            var stdDevSum = artist.Works
-                .Where(x => x.WordCount > 0)
-                .Sum(x => Math.Pow(x.WordCount - report.AverageWords, 2));
+                // using https://www.mathsisfun.com/data/standard-deviation-formulas.html
+                var stdDevSum = artist.Works
+                    .Where(x => x.WordCount > 0)
+                    .Sum(x => Math.Pow(x.WordCount - report.AverageWords, 2));
 
-            report.Variance = stdDevSum / validValuesCount;
+                report.Variance = Math.Round(stdDevSum / validValuesCount, 2);
 
-            report.StandardDeviation = Math.Sqrt(report.Variance);
+                report.StandardDeviation = Math.Round(Math.Sqrt(report.Variance), 2);
+            }
 
             return report;
         }

@@ -8,11 +8,15 @@ namespace Amber.Music.Domain
 
         public string Name { get; set; }
 
-        public int AverageWords { get; set; }
+        public int TotalSongs { get; set; } = 0;
 
-        public double Variance { get; set; }
+        public int SongsConsidered { get; set; } = 0;
 
-        public double StandardDeviation { get; set; }
+        public int AverageWords { get; set; } = 0;
+
+        public double Variance { get; set; } = 0;
+
+        public double StandardDeviation { get; set; } = 0;
 
         public ArtistWork MinWords { get; set; }
 
