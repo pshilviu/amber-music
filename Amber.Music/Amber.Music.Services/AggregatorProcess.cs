@@ -14,8 +14,8 @@ namespace Amber.Music.Services
         private readonly IWordCounterService _wordCounterService;
 
         public AggregatorProcess(
-            ILyricsService lyricsService, 
-            IArtistService artistService, 
+            ILyricsService lyricsService,
+            IArtistService artistService,
             IWordCounterService wordCounterService)
         {
             _lyricsService = lyricsService ?? throw new ArgumentNullException(nameof(lyricsService));

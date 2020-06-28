@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
     <PackageReference Include="MetaBrainz.MusicBrainz" Version="3.0.2" />
   </ItemGroup>
 

@@ -6,7 +6,7 @@ namespace Amber.Music.Services
     {
         public int Count(string text)
         {
-            if(string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(text))
             {
                 return 0;
             }

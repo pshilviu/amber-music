@@ -12,6 +12,7 @@ namespace Amber.Music.Api.Services
     {
         private readonly HttpClient _httpClient;
         private readonly LyricsApiOptions _lyricsApiOptions;
+
         private class LyricsResponse
         {
             [JsonPropertyName("lyrics")]
@@ -29,7 +30,7 @@ namespace Amber.Music.Api.Services
         public async Task<string> SearchAsync(string artist, string title)
         {
             // TODO: validation, error messages?!
-            if(string.IsNullOrEmpty(artist))
+            if (string.IsNullOrEmpty(artist))
             {
                 throw new ArgumentNullException(nameof(artist));
             }
@@ -42,9 +43,9 @@ namespace Amber.Music.Api.Services
             var url = $"{_lyricsApiOptions.Endpoint}/{artist}/{title}";
             var response = await _httpClient.GetAsync(url);
 
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     return null;
                 }

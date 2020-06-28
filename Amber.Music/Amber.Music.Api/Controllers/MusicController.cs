@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Amber.Music.Domain;
+﻿using Amber.Music.Domain;
 using Amber.Music.Domain.Services;
 using Amber.Music.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace Amber.Music.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class MusicController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<MusicController> _logger;
 
         private static SearchResult<ArtistSearch> _searchResults;
 
@@ -21,8 +20,8 @@ namespace Amber.Music.Api.Controllers
         private readonly ILyricsService _lyricsService;
         private readonly AggregatorProcess _aggregatorProcess;
 
-        public WeatherForecastController(
-            ILogger<WeatherForecastController> logger,
+        public MusicController(
+            ILogger<MusicController> logger,
             IArtistService artistService,
             ILyricsService lyricsService,
             AggregatorProcess aggregatorProcess)
@@ -54,24 +53,6 @@ namespace Amber.Music.Api.Controllers
             _searchResults = await _artistService.FindArtistsAsync(query, limit, offset);
 
             return _searchResults;
-        }
-
-        // Get artist info
-        // Get works
-        // Get lyrics for each song
-
-        [HttpGet]
-        [Route("works")]
-        public Task<IEnumerable<ArtistWork>> GetArtist(Guid id)
-        {
-            return _artistService.GetArtistWorksAsync(id);
-        }
-
-        [HttpGet]
-        [Route("lyrics")]
-        public Task<string> GetLyrics(string artist, string title)
-        {
-            return _lyricsService.SearchAsync(artist, title);
         }
 
         [HttpGet]

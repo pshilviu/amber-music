@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Amber.Music.Domain;
+﻿using Amber.Music.Domain;
 using Amber.Music.Domain.Services;
 using Amber.Music.Services;
 using MetaBrainz.MusicBrainz;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Amber.Music.Api.Services
 {
@@ -64,12 +64,12 @@ namespace Amber.Music.Api.Services
             var works = new List<ArtistWork>();
 
             var current = await mbQuery.BrowseArtistWorksAsync(id, 50);
-            while(current != null && current.Results.Count > 0)
+            while (current != null && current.Results.Count > 0)
             {
                 works.AddRange(current.Results.Select(x => new ArtistWork { Id = x.Id, Title = x.Title }));
 
                 current = await current.NextAsync();
-            }            
+            }
 
             return works;
         }
