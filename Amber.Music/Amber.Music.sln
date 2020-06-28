@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amber.Music.Api", "Amber.Music.Api\Amber.Music.Api.csproj", "{46F3504B-8EDD-4634-A86C-F192E5095893}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amber.Music.Api", "Amber.Music.Api\Amber.Music.Api.csproj", "{46F3504B-8EDD-4634-A86C-F192E5095893}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amber.Music.Services", "Amber.Music.Services\Amber.Music.Services.csproj", "{72227C89-5FD9-49F4-9ACB-8F3548A9E338}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amber.Music.Domain", "Amber.Music.Domain\Amber.Music.Domain.csproj", "{7278334B-E816-4D62-A8E2-59B07E1DFCC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{46F3504B-8EDD-4634-A86C-F192E5095893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46F3504B-8EDD-4634-A86C-F192E5095893}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46F3504B-8EDD-4634-A86C-F192E5095893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72227C89-5FD9-49F4-9ACB-8F3548A9E338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72227C89-5FD9-49F4-9ACB-8F3548A9E338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72227C89-5FD9-49F4-9ACB-8F3548A9E338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72227C89-5FD9-49F4-9ACB-8F3548A9E338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7278334B-E816-4D62-A8E2-59B07E1DFCC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7278334B-E816-4D62-A8E2-59B07E1DFCC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7278334B-E816-4D62-A8E2-59B07E1DFCC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7278334B-E816-4D62-A8E2-59B07E1DFCC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
