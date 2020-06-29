@@ -345,7 +345,10 @@
       <h2 *ngIf="loadingSearchResults || searchResults">Search Results</h2>
       <mat-spinner *ngIf="loadingSearchResults" style="margin: auto"></mat-spinner>
       <div *ngIf="searchResults">
-        <em>Showing {{searchResults.offset}} - {{searchResults.endRange}}/{{searchResults.totalResults}}</em>
+        <em>Showing {{searchResults.offset}} - {{searchResults.endRange}}/{{searchResults.totalResults}}</em>&nbsp;
+        <a [routerLink]="" (click)="prevSearchArtist()" *ngIf="hasPrevious">&lt;</a>&nbsp;
+        <a [routerLink]="" (click)="nextSearchArtist()" *ngIf="hasNext">&gt;</a>
+
         <mat-selection-list #searchArtists [multiple]="false">
           <mat-list-option *ngFor="let searchResult of searchResults.results" (click)="getReport(searchResult.id)">
             <a [routerLink]="">{{searchResult.name}}</a>

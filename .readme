@@ -1,0 +1,21 @@
+I meant to have them distributed as containers, but ran out of time and had some CORS issues, as such I've checked the distributables for the apps in the Runnables folder.
+I've also changed the communication to be on http rather than https to avoid any fun with missing certificates.  
+
+API:  
+	- Requirements dotnet Core 3.1  
+	- Run Amber.Music.Api.exe or dotnet Amber.Music.Api.dll (starts on http:5000)  
+	
+UI:  
+	- npm install angular-http-server -g  
+	- from the context of the UI folder run the following command to start  
+	- angular-http-server --path . -p 4200 --open (should open a browser window with the UI)
+
+
+In case you want to run the application you can do so via Visual Studio:
+API
+	- debug in DEBUG or RELEASE configuration Amber.Music.Api profile so that it can run on http port 5000
+	- in case you want to fiddle with that, the UI will need the url updating in app.settings.ts
+UI
+	- the usual Angular process
+	- npm install -- in the root
+	- ng serve -o

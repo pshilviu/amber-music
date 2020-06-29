@@ -29,6 +29,8 @@ export class AppComponent implements OnInit {
   loadingLastSearchedArtists: boolean = false;
   lastSearchedArtists: ArtistSearch[];
   lastSearchError$ = new Subject<boolean>();
+  hasPrevious: boolean = false;
+  hasNext: boolean = false;
 
   loadingReport: boolean = false;
   selectedArtistReport: ArtistWorkReport;
@@ -60,14 +62,28 @@ export class AppComponent implements OnInit {
   }
 
   searchArtists() {  
+    this.searchArtistInternal(this.searchTerm);
+  }
+
+  prevSearchArtist() {
+    this.searchArtistInternal(this.searchTerm, this.searchResults.limit, this.searchResults.offset - this.searchResults.limit);
+  }
+
+  nextSearchArtist() {
+    this.searchArtistInternal(this.searchTerm, this.searchResults.limit, this.searchResults.offset + this.searchResults.limit);
+  }
+
+  searchArtistInternal(query: string, limit: number = 25, offset: number = 0) {
     this.clearSearches();
     this.loadingSearchResults = true;
-    this.musicService.searchArtists(this.searchTerm).subscribe(
+    this.musicService.searchArtists(query, limit, offset).subscribe(
       (data) => {
         this.searchResults = data;
         let offsetLimit = this.searchResults.offset + this.searchResults.limit;
         this.searchResults.endRange = Math.min(offsetLimit, this.searchResults.totalResults);
         this.loadingSearchResults = false;
+        this.hasNext = this.searchResults.endRange < this.searchResults.totalResults;
+        this.hasPrevious = this.searchResults.offset > 0;
       },
       catchError((error) => {
         console.error('error loading the list of artists', error);

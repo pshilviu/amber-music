@@ -1,3 +1,3 @@
 export class AppSettings {
-    musicApiUrl: string = "https://localhost:32782/music"
+    musicApiUrl: string = "http://localhost:5000/music"
 }

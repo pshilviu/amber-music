@@ -19,8 +19,8 @@ export class MusicService {
     private http: HttpClient) { }
   
   // TODO: change to POST along with the backend
-  searchArtists(searchTerm: string) : Observable<ArtistSearchResult> {
-    let url = this.settings.musicApiUrl + '/find/' + searchTerm;
+  searchArtists(searchTerm: string, limit: number = 25, offset: number = 0) : Observable<ArtistSearchResult> {
+    let url = this.settings.musicApiUrl + '/find/' + searchTerm + '/' + limit + '/' + offset;
     return this.http.get<ArtistSearchResult>(url).pipe(
       map((response) => { return response; }),
       catchError(this.handleError)
