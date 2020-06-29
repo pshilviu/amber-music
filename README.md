@@ -13,27 +13,27 @@ I've also changed the communication protocol to be on http rather than https to 
 There are two folders in the Runnables one
 
 API:  
-	- Requirements dotnet Core 3.1  
-	- Run Amber.Music.Api.exe or dotnet Amber.Music.Api.dll (starts on http:5000)  
+- Requirements dotnet Core 3.1  
+- Run Amber.Music.Api.exe or dotnet Amber.Music.Api.dll (starts on http:5000)  
 	
 UI:  
-	- Install Angular's http server to be able to server the compiled code
-  - npm install angular-http-server -g  
-	- from the context of the UI folder run the following command to start
-	- angular-http-server --path . -p 4200 --open (should open a browser window with the UI)
+- Install Angular's http server to be able to server the compiled code  
+- ```npm install angular-http-server -g```  
+- from the context of the UI folder run the following command to start a the application and open a browser window
+- ```angular-http-server --path . -p 4200 --open```
 
 ### From the codebase
 
 In case you want to run the application you can do so via Visual Studio:  
 
-API  
-	- please make sure you run it using Amber.Music.Api profile so that it can run on http port 5000, or https port 5001  
-	- in case you want/need to run the API on a different port, the UI will need the to have the API url updating in app.settings.ts  
+API:  
+- please make sure you run it using Amber.Music.Api profile so that it can run on http port 5000, or https port 5001  
+- in case you want/need to run the API on a different port, the UI will need the to have the API url updating in app.settings.ts  
 
-UI  
-	- the usual Angular process, from the root of the UI folder  
-	- npm install  
-	- ng serve -o  
+UI:  
+- the usual Angular process, from the root of the UI folder  
+- ```npm install```  
+- ```ng serve -o```  
   
 ### Functionality implemented  
 - searching artists by name  
