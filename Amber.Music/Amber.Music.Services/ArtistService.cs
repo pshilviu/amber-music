@@ -18,7 +18,7 @@ namespace Amber.Music.Api.Services
             Query.DefaultUserAgent = $"{options.Name}/{options.Version} ( {options.ContactEmail} )";
         }
 
-        public async Task<SearchResult<ArtistSearch>> FindArtistsAsync(string query, int? limit = null, int? offset = null)
+        public async Task<SearchResult<ArtistSearch>> FindArtistsAsync(string query, int? limit = 25, int? offset = null)
         {
             if (string.IsNullOrWhiteSpace(query))
             {
@@ -40,6 +40,8 @@ namespace Amber.Music.Api.Services
                     Area = x.Item.Area?.ToString()
                 }).ToArray(),
                 TotalResults = searchResults.TotalResults,
+                Limit = searchResults.Limit ?? limit ?? 25,
+                Offset = searchResults.Offset
             };
         }
 

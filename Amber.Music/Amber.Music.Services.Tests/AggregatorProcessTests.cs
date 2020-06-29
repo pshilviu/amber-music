@@ -25,14 +25,19 @@ namespace Amber.Music.Services.Tests
 
             public Mock<IWordCounterService> WordCounterService { get; } = new Mock<IWordCounterService>();
 
+            public Mock<ICacheService> CacheService { get; } = new Mock<ICacheService>();
+
             public IAggregatorProcess Process { get; }
 
             public SutContext()
             {
+                var works = new Dictionary<Guid, Dictionary<Guid, ArtistWork>>();
+                CacheService.Setup(x => x.Works).Returns(works);
                 Process = new AggregatorProcess(
                     LyricsService.Object,
                     ArtistService.Object,
-                    WordCounterService.Object
+                    WordCounterService.Object,
+                    CacheService.Object
                 );
             }
         }

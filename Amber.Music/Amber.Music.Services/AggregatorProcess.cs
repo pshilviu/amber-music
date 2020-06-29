@@ -12,15 +12,18 @@ namespace Amber.Music.Services
         private readonly ILyricsService _lyricsService;
         private readonly IArtistService _artistService;
         private readonly IWordCounterService _wordCounterService;
+        private readonly ICacheService _cacheService;
 
         public AggregatorProcess(
             ILyricsService lyricsService,
             IArtistService artistService,
-            IWordCounterService wordCounterService)
+            IWordCounterService wordCounterService,
+            ICacheService cacheService)
         {
             _lyricsService = lyricsService ?? throw new ArgumentNullException(nameof(lyricsService));
             _artistService = artistService ?? throw new ArgumentNullException(nameof(artistService));
             _wordCounterService = wordCounterService ?? throw new ArgumentNullException(nameof(wordCounterService));
+            _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
         }
 
         public async Task<ArtistWorkReport> AggregateDataAsync(Guid artistId)
@@ -45,6 +48,8 @@ namespace Amber.Music.Services
             ArtistWork minWorkInfo = null, maxWorkInfo = null;
             var syncLock = new object();
 
+            _cacheService.InitializeArtistWorks(artistId);
+
             await artist.Works.ParallelForEachAsync(async (work) =>
             {
                 // retrieve lyrics
@@ -53,7 +58,8 @@ namespace Amber.Music.Services
                 // calculate number of words
                 work.WordCount = _wordCounterService.Count(work.Lyrics);
 
-                // TODO: persist to DB
+                // keep a copy so we can do further operations on the data without interogating the APIs
+                _cacheService.AddArtistWork(artistId, work);
 
                 // skip from the report songs that we couldn't find lyrics for
                 if (work.WordCount == 0)

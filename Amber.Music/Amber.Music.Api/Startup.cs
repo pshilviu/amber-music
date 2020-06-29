@@ -1,25 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Amber.Music.Api.Services;
+using Amber.Music.Domain;
 using Amber.Music.Domain.Services;
 using Amber.Music.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System.Net.Http;
 
 namespace Amber.Music.Api
 {
     public class Startup
     {
+        private readonly string AllowAllSpecificOrigins = "_allowAll";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,6 +25,18 @@ namespace Amber.Music.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(AllowAllSpecificOrigins,
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             services.AddControllers();
 
             // TODO: convention based
@@ -39,14 +46,15 @@ namespace Amber.Music.Api
 
             var lyricsApiOptions = new LyricsApiOptions();
             Configuration.GetSection(LyricsApiOptions.SectionName).Bind(lyricsApiOptions);
-            services.AddSingleton(lyricsApiOptions);          
+            services.AddSingleton(lyricsApiOptions);
 
             services.AddTransient<IArtistService, MusicBrainzService>();
             services.AddTransient<ILyricsService, LyricsService>();
             services.AddTransient<IWordCounterService, WordCounterService>();
-            services.AddTransient<AggregatorProcess>();            
-            
+            services.AddTransient<IAggregatorProcess, AggregatorProcess>();
+
             services.AddSingleton(new HttpClient());
+            services.AddSingleton<ICacheService, CacheService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +68,8 @@ namespace Amber.Music.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(AllowAllSpecificOrigins);
 
             app.UseAuthorization();
 

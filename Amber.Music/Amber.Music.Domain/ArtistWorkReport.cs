@@ -21,5 +21,9 @@ namespace Amber.Music.Domain
         public ArtistWork MinWords { get; set; }
 
         public ArtistWork MaxWords { get; set; }
+
+        public DateTime LastGenerated { get; } = DateTime.Now;
+
+        public DateTime LastAccessed { get; set; } = DateTime.Now;
     }
 }
