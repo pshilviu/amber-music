@@ -8,6 +8,10 @@ import { catchError, map } from 'rxjs/operators';
 import { ArtistSearchResult } from '../domain/artist-search-result';
 import { ArtistWorkReport } from 'src/domain/artist-work-report';
 import { MatDialog } from '@angular/material/dialog';
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { Label } from 'ng2-charts';
+
+// TODO: this component must be split into multiple ones
 
 @Component({
   selector: 'app-root',
@@ -36,6 +40,16 @@ export class AppComponent implements OnInit {
   comparisonReport: CompareRow[];
 
   displayedColumns: string[] = ['propertyName', 'value1', 'value2'];
+
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  public barChartLabels: Label[];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+  public barChartPlugins = [];
+
+  public barChartData: ChartDataSets[];
 
   constructor(
     private musicService: MusicService,
@@ -115,10 +129,38 @@ export class AppComponent implements OnInit {
 
     let report2$ = this.musicService.getArtistReport(report2Id);
     let report1$ = this.musicService.getArtistReport(report1Id);
+    let releaseReport2$ = this.musicService.getReleasesReport(report2Id);
+    let releaseReport1$ = this.musicService.getReleasesReport(report1Id);
 
-    forkJoin([report2$, report1$]).subscribe(results => {
+    forkJoin([report2$, report1$, releaseReport2$, releaseReport1$]).subscribe(results => {
       this.report1 = results[1];
       this.report2 = results[0];
+
+      const labels: number[] = [];
+      let releaseReport2 = results[2];
+      let releaseReport1 = results[3];
+
+      // TODO: needs optimisation
+      // merge labels array
+      releaseReport2.yearlyReleases.forEach(el => labels.push(el.year));
+      releaseReport1.yearlyReleases.forEach(el => {
+        let shouldAdd = labels.findIndex(targetElement => el.year === targetElement) < 0;
+        if(shouldAdd)
+        {
+          labels.push(el.year);
+        }        
+      });
+      // sort merged array
+      labels.sort();
+      this.barChartLabels = labels.map((label) => label.toString());
+
+      this.barChartData = 
+      [
+        { label: this.report1.name, data: labels
+            .map((year) => releaseReport1.yearlyReleases.find((x) => x.year == year)?.releases || 0) },
+        { label: this.report2.name, data: labels
+          .map((year) => releaseReport2.yearlyReleases.find((x) => x.year == year)?.releases || 0) },
+      ];
 
       this.comparisonReport = [
         new CompareRow("Name", this.report1.name, this.report2.name, false, false),

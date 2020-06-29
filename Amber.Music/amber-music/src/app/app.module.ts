@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppSettings } from '../app.settings';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChartsModule } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +26,7 @@ import { MusicService } from './music.service';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ChartsModule,
     FormsModule,
     HttpClientModule,
     MatButtonModule,

@@ -413,6 +413,18 @@
         </div>
       </div>
       <div *ngIf="comparisonReport" style="width: 100%;">
+        <h1>Comparison Report</h1>
+        <div *ngIf="barChartData" style="display: block;">
+          <h2>Releases Comparison</h2>
+          <canvas baseChart 
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+          </canvas>
+        </div>
         <mat-table [dataSource]="comparisonReport" class="mat-elevation-z8">
           <!-- Property Column -->
           <ng-container matColumnDef="propertyName">
