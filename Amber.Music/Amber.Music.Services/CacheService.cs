@@ -11,19 +11,25 @@ namespace Amber.Music.Services
 
         private static readonly Dictionary<Guid, ArtistWorkReport> _reports = new Dictionary<Guid, ArtistWorkReport>();
 
+        private static readonly Dictionary<Guid, List<ArtistRelease>> _releases = new Dictionary<Guid, List<ArtistRelease>>();
+
         public Dictionary<Guid, ArtistWorkReport> Reports => _reports;
 
         public Dictionary<Guid, Dictionary<Guid, ArtistWork>> Works => _works;
 
-        private object worksLock = new object();
+        public Dictionary<Guid, List<ArtistRelease>> Releases => _releases;
 
-        private object collectionLock = new object();
+        private readonly object _worksLock = new object();
 
-        private object reportsLock = new object();
+        private readonly object _collectionLock = new object();
+
+        private readonly object _reportsLock = new object();
+
+        private readonly object _releasesLock = new object();
 
         public void AddReport(Guid id, ArtistWorkReport report)
         {
-            lock (reportsLock)
+            lock (_reportsLock)
             {
                 if (!_reports.ContainsKey(id))
                 {
@@ -34,7 +40,7 @@ namespace Amber.Music.Services
 
         public void InitializeArtistWorks(Guid id)
         {
-            lock (worksLock)
+            lock (_worksLock)
             {
                 if (!_works.ContainsKey(id))
                 {
@@ -47,13 +53,30 @@ namespace Amber.Music.Services
         {
             var artistWorks = _works[artistId];
 
-            lock (collectionLock)
+            lock (_collectionLock)
             {
                 if (!_works.ContainsKey(work.Id))
                 {
                     artistWorks.Add(work.Id, work);
                 }
             }
+        }
+
+        public void InitializeArtistReleases(Guid artistId)
+        {
+            lock (_releasesLock)
+            {
+                if (!_releases.ContainsKey(artistId))
+                {
+                    _releases.Add(artistId, new List<ArtistRelease>());
+                }
+            }
+        }
+
+        public void AddReleases(Guid artistId, IEnumerable<ArtistRelease> release)
+        {
+            InitializeArtistReleases(artistId);
+            _releases[artistId].AddRange(release);
         }
     }
 }

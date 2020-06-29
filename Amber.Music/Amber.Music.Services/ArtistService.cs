@@ -65,7 +65,7 @@ namespace Amber.Music.Api.Services
 
             var works = new List<ArtistWork>();
 
-            var current = await mbQuery.BrowseArtistWorksAsync(id, 50);
+            var current = await mbQuery.BrowseArtistWorksAsync(id, 100);
             while (current != null && current.Results.Count > 0)
             {
                 works.AddRange(current.Results.Select(x => new ArtistWork { Id = x.Id, Title = x.Title }));
@@ -74,6 +74,23 @@ namespace Amber.Music.Api.Services
             }
 
             return works;
+        }
+
+        public async Task<IReadOnlyCollection<ArtistRelease>> GetArtistReleaseAsync(Guid id)
+        {
+            using var mbQuery = new Query();
+
+            var releases = new List<ArtistRelease>();
+
+            var current = await mbQuery.BrowseArtistReleasesAsync(id, 100);
+            while (current != null && current.Results.Count > 0)
+            {
+                releases.AddRange(current.Results.Select(x => new ArtistRelease { Id = x.Id, Title = x.Title, Date = x.Date?.NearestDate }));
+
+                current = await current.NextAsync();
+            }
+
+            return releases;
         }
     }
 }

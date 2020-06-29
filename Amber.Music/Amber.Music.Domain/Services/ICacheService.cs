@@ -11,6 +11,11 @@ namespace Amber.Music.Domain.Services
         Dictionary<Guid, ArtistWorkReport> Reports { get; }
 
         /// <summary>
+        /// ArtistId, Release
+        /// </summary>
+        Dictionary<Guid, List<ArtistRelease>> Releases { get; }
+
+        /// <summary>
         /// ArtistId, (WorkId, ArtistWork/Song)
         /// </summary>
         Dictionary<Guid, Dictionary<Guid, ArtistWork>> Works { get; }
@@ -20,5 +25,7 @@ namespace Amber.Music.Domain.Services
         void InitializeArtistWorks(Guid id);
 
         void AddArtistWork(Guid artistId, ArtistWork work);
+
+        void AddReleases(Guid artistId, IEnumerable<ArtistRelease> release);
     }
 }

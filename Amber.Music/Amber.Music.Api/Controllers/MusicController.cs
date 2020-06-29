@@ -57,11 +57,27 @@ namespace Amber.Music.Api.Controllers
         [Route("report/{id}")]
         public async Task<ArtistWorkReport> GetArtistWorkReport(Guid id)
         {
-            var report = await _aggregatorProcess.AggregateDataAsync(id);
-            _cacheService.AddReport(id, report);
+            if (!_cacheService.Reports.ContainsKey(id))
+            {
+                var report = await _aggregatorProcess.AggregateDataAsync(id);
+                _cacheService.AddReport(id, report);
+            }
 
             _cacheService.Reports[id].LastAccessed = DateTime.Now;
             return _cacheService.Reports[id];
+        }
+
+        [HttpGet]
+        [Route("releases/{id}")]
+        public async Task<ArtistReleaseReport> GetArtistReleasesReport(Guid id)
+        {
+            if (!_cacheService.Releases.ContainsKey(id))
+            {
+                var report = await _artistService.GetArtistReleaseAsync(id);
+                _cacheService.AddReleases(id, report);
+            }
+
+            return _aggregatorProcess.CompileReleasesPerYearReport(id, _cacheService.Releases[id]);
         }
     }
 }

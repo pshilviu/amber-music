@@ -2,6 +2,7 @@
 using Amber.Music.Domain.Services;
 using Dasync.Collections;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -106,6 +107,19 @@ namespace Amber.Music.Services
             }
 
             return report;
+        }
+
+        public ArtistReleaseReport CompileReleasesPerYearReport(Guid artistId, IEnumerable<ArtistRelease> releases)
+        {
+            return new ArtistReleaseReport
+            {
+                ArtistId = artistId,
+                YearlyReleases = releases
+                    .Where(x => x.Date.HasValue)
+                    .GroupBy(x => x.Date.Value.Year)
+                    .Select(x => new ArtistReleaseReport.ReleaseRow { Year = x.Key, Releases = x.Count() })
+                    .ToArray()
+            };
         }
     }
 }
