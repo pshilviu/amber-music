@@ -136,30 +136,27 @@ export class AppComponent implements OnInit {
       this.report1 = results[1];
       this.report2 = results[0];
 
-      const labels: number[] = [];
       let releaseReport2 = results[2];
       let releaseReport1 = results[3];
 
-      // TODO: needs optimisation
-      // merge labels array
-      releaseReport2.yearlyReleases.forEach(el => labels.push(el.year));
-      releaseReport1.yearlyReleases.forEach(el => {
-        let shouldAdd = labels.findIndex(targetElement => el.year === targetElement) < 0;
-        if(shouldAdd)
-        {
-          labels.push(el.year);
-        }        
-      });
-      // sort merged array
-      labels.sort();
+      let years = [
+        ...releaseReport2.yearlyReleases.map(releaseYear => releaseYear.year),
+        ...releaseReport1.yearlyReleases.map(releaseYear => releaseYear.year)
+      ] // convert to object <== no need to sort: Properties are automatically sorted
+      .reduce((acc, currentYear) => {
+        if (acc[currentYear.toString()] !== null) { acc[currentYear.toString()] = null };
+        return acc;
+      }, {});
+
+      const labels = Object.keys(years);
       this.barChartLabels = labels.map((label) => label.toString());
 
       this.barChartData = 
       [
         { label: this.report1.name, data: labels
-            .map((year) => releaseReport1.yearlyReleases.find((x) => x.year == year)?.releases || 0) },
+            .map((year) => releaseReport1.yearlyReleases.find((x) => x.year == +year)?.releases || 0) },
         { label: this.report2.name, data: labels
-          .map((year) => releaseReport2.yearlyReleases.find((x) => x.year == year)?.releases || 0) },
+          .map((year) => releaseReport2.yearlyReleases.find((x) => x.year == +year)?.releases || 0) },
       ];
 
       this.comparisonReport = [
